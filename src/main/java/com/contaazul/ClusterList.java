@@ -8,21 +8,21 @@ import java.util.List;
  * @author Carlos Alexandro Becker
  */
 public final class ClusterList {
-	private final transient Config config;
+    private final transient Config config;
 
-	public ClusterList(Config config) {
-		this.config = config;
-	}
+    public ClusterList(Config config) {
+        this.config = config;
+    }
 
-	/**
-	 * Returns the list of configured clusters.
-	 * @return List of clusters.
+    /**
+     * Returns the list of configured clusters.
+     * @return List of clusters.
      */
-	public List<String> get() {
-		final String clusterConfig = config.clusters();
-		if (clusterConfig == null || clusterConfig.trim().length() == 0) {
-			return Lists.newArrayList( "default" );
-		}
-		return Lists.newArrayList( clusterConfig.trim().split( "," ) );
-	}
+    public List<String> get() {
+        final String clusterConfig = this.config.clusters();
+        if (clusterConfig == null || clusterConfig.trim().length() == 0) {
+            return Lists.newArrayList("default");
+        }
+        return Lists.newArrayList(clusterConfig.trim().split(","));
+    }
 }

@@ -1,5 +1,6 @@
 package com.contaazul;
 
+import com.amazonaws.auth.AWSCredentials;
 import com.netflix.turbine.discovery.Instance;
 import com.netflix.turbine.discovery.InstanceDiscovery;
 import java.util.Collection;
@@ -17,26 +18,32 @@ public final class EC2Discovery implements InstanceDiscovery {
     private final transient Config config;
 
     /**
+     * AWS credentials.
+     */
+    private final transient AWSCredentials credentials;
+
+    /**
      * Ctor using configs from properties.
      */
     public EC2Discovery() {
-        this(new Config.FromProperties());
+        this(new Config.FromProperties(), new AWSCredentialsFromProperties());
     }
 
     /**
      * Ctor.
-     * @param config config implementation.
+     * @param config Config implementation.
+     * @param credentials AWS credentials.
      */
-    public EC2Discovery(final Config config) {
+    public EC2Discovery(final Config config, final AWSCredentials credentials) {
         this.config = config;
+        this.credentials = credentials;
     }
 
     @Override
     public Collection<Instance> getInstanceList() throws Exception {
-        return new ClusterList(this.config)
-            .get()
+        return new ClusterList(this.config).get()
             .parallelStream()
-            .map(cluster -> new InstanceList(cluster).get())
+            .map(cluster -> new InstanceList(cluster, this.credentials).get())
             .flatMap(List::stream)
             .collect(Collectors.toList());
     }

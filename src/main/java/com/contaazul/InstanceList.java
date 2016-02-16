@@ -3,49 +3,61 @@ package com.contaazul;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
-import com.amazonaws.services.ec2.model.DescribeInstancesResult;
 import com.amazonaws.services.ec2.model.Filter;
 import com.amazonaws.services.ec2.model.Reservation;
 import com.netflix.turbine.discovery.Instance;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Instance listing from ec2.
+ * @author Carlos Alexandro Becker
+ */
 public final class InstanceList {
-	private final String cluster;
+    /**
+     * Cluster.
+     */
+    private final transient String cluster;
 
-	public InstanceList(final String cluster) {
-		this.cluster = cluster;
-	}
+    /**
+     * AWS Credentials.
+     */
+    private final transient AWSCredentials credentials;
 
-	public List<Instance> get() {
-		final List<Instance> list = new ArrayList<Instance>();
-		final EC2ToTurbineInstance converter = new EC2ToTurbineInstance( this.cluster );
-		for (final String tag : System.getProperty( "TAG_NAMES" ).split( ";" )) {
-			for (Reservation reservation : filter( tag ).getReservations()) {
-				for (com.amazonaws.services.ec2.model.Instance instance : reservation.getInstances()) {
-					list.add( converter.convert( instance ) );
-				}
-			}
-		}
-		return list;
-	}
+    /**
+     * Ctor.
+     * @param cluster Cluster.
+     * @param credentials AWS credentials.
+     */
+    public InstanceList(
+        final String cluster,
+        final AWSCredentials credentials
+    ) {
+        this.cluster = cluster;
+        this.credentials = credentials;
+    }
 
-	private DescribeInstancesResult filter(final String tag) {
-		final Filter filter = new Filter()
-				.withName( String.format( "tag:%s", tag ) )
-				.withValues( this.cluster );
-		return new AmazonEC2Client( new Credentials() )
-				.describeInstances( new DescribeInstancesRequest().withFilters( filter ) );
-	}
-
-	private static class Credentials implements AWSCredentials {
-		public String getAWSSecretKey() {
-			return System.getProperty( "AWS_SECRET_KEY" );
-		}
-
-		public String getAWSAccessKeyId() {
-			return System.getProperty( "AWS_ACCESS_KEY" );
-		}
-	}
+    /**
+     * Gets the list of ec2 intances of a given cluster.
+     * @return List of instances.
+     */
+    public List<Instance> get() {
+        final EC2ToTurbineInstance converter = new EC2ToTurbineInstance(
+            this.cluster
+        );
+        final DescribeInstancesRequest request = new DescribeInstancesRequest()
+            .withFilters(
+                new Filter()
+                    .withName(new ClusterTag(this.cluster).get())
+                    .withValues(this.cluster)
+            );
+        return new AmazonEC2Client(this.credentials)
+            .describeInstances(request)
+            .getReservations()
+            .stream()
+            .map(Reservation::getInstances)
+            .flatMap(List::stream)
+            .map(converter::convert)
+            .collect(Collectors.toList());
+    }
 }
