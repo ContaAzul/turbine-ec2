@@ -9,8 +9,15 @@ import java.util.List;
  * @author Carlos Alexandro Becker
  */
 public final class ClusterList {
+    /**
+     * Config.
+     */
     private final transient Config config;
 
+    /**
+     * Ctor.
+     * @param config Config.
+     */
     public ClusterList(Config config) {
         this.config = config;
     }

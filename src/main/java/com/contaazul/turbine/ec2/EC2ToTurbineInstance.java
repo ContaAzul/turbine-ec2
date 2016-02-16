@@ -10,7 +10,7 @@ public final class EC2ToTurbineInstance {
     /**
      * Cluster name.
      */
-    private final String cluster;
+    private final transient String cluster;
 
     /**
      * Ctor.

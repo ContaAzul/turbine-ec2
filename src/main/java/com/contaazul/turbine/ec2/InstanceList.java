@@ -33,7 +33,6 @@ public final class InstanceList {
      * Ctor.
      * @param cluster Cluster.
      * @param credentials AWS credentials.
-     * @param client
      * @param config Config.
      */
     public InstanceList(

@@ -6,58 +6,66 @@ import com.netflix.turbine.discovery.InstanceDiscovery;
 
 /**
  * Auto discovery configuration.
- *
  * @author Carlos Alexandro Becker
  */
 public interface Config {
-	/**
-	 * Get the list of clusters configured by the user.
-	 * @return Cluster config.
-	 */
-	String clusters();
+    /**
+     * Get the list of clusters configured by the user.
+     * @return Cluster config.
+     */
+    String clusters();
 
-	String defaultTag();
+    /**
+     * Default tag to filter on.
+     * @return Default tag name.
+     */
+    String defaultTag();
 
-	String tag(final String cluster);
+    /**
+     * Gets the tag name for a given cluster.
+     * @param cluster Cluster name.
+     * @return Tag name.
+     */
+    String tag(String cluster);
 
-	/**
-	 * Loads config from properties.
-	 */
-	final class FromProperties implements Config {
-		/**
-		 * Cluster list property.
-		 */
-		private static final DynamicStringProperty CLUSTERS =
-			DynamicPropertyFactory.getInstance().getStringProperty(
-				InstanceDiscovery.TURBINE_AGGREGATOR_CLUSTER_CONFIG, null
-			);
+    /**
+     * Loads config from properties.
+     */
+    final class FromProperties implements Config {
+        /**
+         * Cluster list property.
+         */
+        private static final DynamicStringProperty CLUSTERS =
+            DynamicPropertyFactory.getInstance().getStringProperty(
+                InstanceDiscovery.TURBINE_AGGREGATOR_CLUSTER_CONFIG, null
+            );
 
-		/**
-		 * Default tag name.
-		 */
-		private static final DynamicStringProperty DEFAULT_TAG =
-			DynamicPropertyFactory
-				.getInstance()
-				.getStringProperty("turbine.ec2.default.tag", null);
+        /**
+         * Default tag name.
+         */
+        private static final DynamicStringProperty DEFAULT_TAG =
+            DynamicPropertyFactory
+                .getInstance()
+                .getStringProperty("turbine.ec2.default.tag", null);
 
-		@Override
-		public String clusters() {
-			return Config.FromProperties.CLUSTERS.get();
-		}
+        @Override
+        public String clusters() {
+            return Config.FromProperties.CLUSTERS.get();
+        }
 
-		@Override
-		public String defaultTag() {
-			return Config.FromProperties.DEFAULT_TAG.get();
-		}
+        @Override
+        public String defaultTag() {
+            return Config.FromProperties.DEFAULT_TAG.get();
+        }
 
-		@Override
-		public String tag(final String cluster) {
-			final String property = String.format(
-				"turbine.ec2.%s.tag", cluster
-			);
-			return DynamicPropertyFactory.getInstance()
-				.getStringProperty(property, null)
-				.get();
-		}
-	}
+        @Override
+        public String tag(final String cluster) {
+            final String property = String.format(
+                "turbine.ec2.%s.tag", cluster
+            );
+            return DynamicPropertyFactory.getInstance()
+                .getStringProperty(property, null)
+                .get();
+        }
+    }
 }
