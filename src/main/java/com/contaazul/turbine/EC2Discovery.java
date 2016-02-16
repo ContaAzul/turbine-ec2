@@ -1,6 +1,6 @@
 package com.contaazul.turbine;
 
-import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.contaazul.turbine.ec2.AWSCredentialsFromProperties;
 import com.contaazul.turbine.ec2.ClusterList;
 import com.contaazul.turbine.ec2.InstanceList;
@@ -21,25 +21,28 @@ public final class EC2Discovery implements InstanceDiscovery {
     private final transient Config config;
 
     /**
-     * AWS credentials.
+     * Ec2 client.
      */
-    private final transient AWSCredentials credentials;
+    private final transient AmazonEC2Client client;
 
     /**
      * Ctor using configs from properties.
      */
     public EC2Discovery() {
-        this(new Config.FromProperties(), new AWSCredentialsFromProperties());
+        this(
+            new Config.FromProperties(),
+            new AmazonEC2Client(new AWSCredentialsFromProperties())
+        );
     }
 
     /**
      * Ctor.
      * @param config Config implementation.
-     * @param credentials AWS credentials.
+     * @param client Ec2 client.
      */
-    public EC2Discovery(final Config config, final AWSCredentials credentials) {
+    public EC2Discovery(final Config config, final AmazonEC2Client client) {
         this.config = config;
-        this.credentials = credentials;
+        this.client = client;
     }
 
     @Override
@@ -47,7 +50,7 @@ public final class EC2Discovery implements InstanceDiscovery {
         return new ClusterList(this.config).get()
             .parallelStream()
             .map(cluster -> new InstanceList(
-                    cluster, this.credentials, this.config
+                    cluster, this.config, this.client
                 ).get()
             ).flatMap(List::stream)
             .collect(Collectors.toList());

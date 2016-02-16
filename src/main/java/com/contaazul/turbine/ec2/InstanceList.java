@@ -1,6 +1,5 @@
 package com.contaazul.turbine.ec2;
 
-import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.Filter;
@@ -21,9 +20,9 @@ public final class InstanceList {
     private final transient String cluster;
 
     /**
-     * AWS Credentials.
+     * AWS ec2 client.
      */
-    private final transient AWSCredentials credentials;
+    private final transient AmazonEC2Client client;
 
     /**
      * Config.
@@ -34,15 +33,16 @@ public final class InstanceList {
      * Ctor.
      * @param cluster Cluster.
      * @param credentials AWS credentials.
+     * @param client
      * @param config Config.
      */
     public InstanceList(
         final String cluster,
-        final AWSCredentials credentials,
-        final Config config
+        final Config config,
+        final AmazonEC2Client client
     ) {
         this.cluster = cluster;
-        this.credentials = credentials;
+        this.client = client;
         this.config = config;
     }
 
@@ -54,8 +54,8 @@ public final class InstanceList {
         final EC2ToTurbineInstance converter = new EC2ToTurbineInstance(
             this.cluster
         );
-        return new AmazonEC2Client(this.credentials)
-            .describeInstances(this.describeInstancesRequest())
+        return this.client
+            .describeInstances(this.request())
             .getReservations()
             .stream()
             .map(Reservation::getInstances)
@@ -68,11 +68,10 @@ public final class InstanceList {
      * Builds a describe instance request.
      * @return Request.
      */
-    private DescribeInstancesRequest describeInstancesRequest() {
+    private DescribeInstancesRequest request() {
         final Filter filter = new Filter()
             .withName(new ClusterTag(this.cluster, this.config).get())
             .withValues(this.cluster);
-        return new DescribeInstancesRequest()
-            .withFilters(filter);
+        return new DescribeInstancesRequest().withFilters(filter);
     }
 }
