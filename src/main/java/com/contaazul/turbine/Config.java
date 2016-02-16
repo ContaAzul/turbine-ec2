@@ -1,4 +1,4 @@
-package com.contaazul;
+package com.contaazul.turbine;
 
 import com.netflix.config.DynamicPropertyFactory;
 import com.netflix.config.DynamicStringProperty;

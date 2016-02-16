@@ -1,4 +1,4 @@
-package com.contaazul;
+package com.contaazul.turbine.ec2;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.ec2.AmazonEC2Client;

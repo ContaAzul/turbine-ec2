@@ -1,5 +1,6 @@
-package com.contaazul;
+package com.contaazul.turbine.ec2;
 
+import com.contaazul.turbine.ec2.ClusterTag;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

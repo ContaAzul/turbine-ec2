@@ -1,6 +1,9 @@
-package com.contaazul;
+package com.contaazul.turbine;
 
 import com.amazonaws.auth.AWSCredentials;
+import com.contaazul.turbine.ec2.AWSCredentialsFromProperties;
+import com.contaazul.turbine.ec2.ClusterList;
+import com.contaazul.turbine.ec2.InstanceList;
 import com.netflix.turbine.discovery.Instance;
 import com.netflix.turbine.discovery.InstanceDiscovery;
 import java.util.Collection;

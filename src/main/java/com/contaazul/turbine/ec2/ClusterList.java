@@ -1,5 +1,6 @@
-package com.contaazul;
+package com.contaazul.turbine.ec2;
 
+import com.contaazul.turbine.Config;
 import com.google.common.collect.Lists;
 import java.util.List;
 

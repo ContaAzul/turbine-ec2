@@ -1,4 +1,4 @@
-package com.contaazul;
+package com.contaazul.turbine.ec2;
 
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.InstanceState;

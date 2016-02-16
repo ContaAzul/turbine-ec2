@@ -1,5 +1,7 @@
-package com.contaazul;
+package com.contaazul.turbine.ec2;
 
+import com.contaazul.turbine.Config;
+import com.contaazul.turbine.ec2.ClusterList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
