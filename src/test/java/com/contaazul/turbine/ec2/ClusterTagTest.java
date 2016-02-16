@@ -1,6 +1,6 @@
 package com.contaazul.turbine.ec2;
 
-import com.contaazul.turbine.ec2.ClusterTag;
+import com.contaazul.turbine.Config;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -14,15 +14,62 @@ public final class ClusterTagTest {
      */
     @Test
     public void usesDefaultTagIfNoSpecificTagProvided() {
-        Assertions.assertThat(new ClusterTag("blah").get())
-            .isEqualTo("tag:default-tag");
+        Assertions.assertThat(
+            new ClusterTag(
+                "blah", new ClusterTagTest.FakeConfig("default-tag", null)
+            ).get()
+        ).isEqualTo("tag:default-tag");
     }
+
     /**
      * {@link ClusterTag} can get the default tag name if none is provided.
      */
     @Test
     public void usesGivenTag() {
-        Assertions.assertThat(new ClusterTag("cluster1").get())
-            .isEqualTo("tag:cluster1-tag");
+        Assertions.assertThat(
+            new ClusterTag(
+                "blah", new ClusterTagTest.FakeConfig("default-tag", "blah-tag")
+            ).get()
+        ).isEqualTo("tag:blah-tag");
+    }
+
+    /**
+     * Fake config impl. for cluster tag tests.
+     */
+    private static class FakeConfig implements Config {
+        /**
+         * Expected default tag.
+         */
+        private final transient String defaultTag;
+
+        /**
+         * Expected tag.
+         */
+        private final transient String tag;
+
+        /**
+         * Ctor.
+         * @param defaultTag Expected default tag.
+         * @param tag Expected tag.
+         */
+        private FakeConfig(final String defaultTag, final String tag) {
+            this.defaultTag = defaultTag;
+            this.tag = tag;
+        }
+
+        @Override
+        public String clusters() {
+            return null;
+        }
+
+        @Override
+        public String defaultTag() {
+            return this.defaultTag;
+        }
+
+        @Override
+        public String tag(final String cluster) {
+            return this.tag;
+        }
     }
 }

@@ -16,6 +16,10 @@ public interface Config {
 	 */
 	String clusters();
 
+	String defaultTag();
+
+	String tag(final String cluster);
+
 	/**
 	 * Loads config from properties.
 	 */
@@ -28,9 +32,32 @@ public interface Config {
 				InstanceDiscovery.TURBINE_AGGREGATOR_CLUSTER_CONFIG, null
 			);
 
+		/**
+		 * Default tag name.
+		 */
+		private static final DynamicStringProperty DEFAULT_TAG =
+			DynamicPropertyFactory
+				.getInstance()
+				.getStringProperty("turbine.ec2.default.tag", null);
+
 		@Override
 		public String clusters() {
 			return Config.FromProperties.CLUSTERS.get();
+		}
+
+		@Override
+		public String defaultTag() {
+			return Config.FromProperties.DEFAULT_TAG.get();
+		}
+
+		@Override
+		public String tag(final String cluster) {
+			final String property = String.format(
+				"turbine.ec2.%s.tag", cluster
+			);
+			return DynamicPropertyFactory.getInstance()
+				.getStringProperty(property, null)
+				.get();
 		}
 	}
 }

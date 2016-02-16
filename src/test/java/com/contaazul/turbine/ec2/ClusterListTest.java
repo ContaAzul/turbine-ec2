@@ -1,7 +1,6 @@
 package com.contaazul.turbine.ec2;
 
 import com.contaazul.turbine.Config;
-import com.contaazul.turbine.ec2.ClusterList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -18,12 +17,7 @@ public final class ClusterListTest {
     @Test
     public void nullClustersReturnDefault() {
         final List<String> clusters = new ClusterList(
-            new Config() {
-                @Override
-                public String clusters() {
-                    return null;
-                }
-            }
+            new ClusterListTest.FakeConfig(null)
         ).get();
         Assertions.assertThat(clusters)
             .hasSize(1)
@@ -37,12 +31,7 @@ public final class ClusterListTest {
     @Test
     public void emptyClustersReturnDefault() {
         final List<String> clusters = new ClusterList(
-            new Config() {
-                @Override
-                public String clusters() {
-                    return "";
-                }
-            }
+            new ClusterListTest.FakeConfig("")
         ).get();
         Assertions.assertThat(clusters)
             .hasSize(1)
@@ -55,15 +44,43 @@ public final class ClusterListTest {
     @Test
     public void validClustersReturnItsValues() {
         final List<String> clusters = new ClusterList(
-            new Config() {
-                @Override
-                public String clusters() {
-                    return "cluster1,cluster2,cluster3";
-                }
-            }
+            new ClusterListTest.FakeConfig("cluster1,cluster2,cluster3")
         ).get();
         Assertions.assertThat(clusters)
             .hasSize(3)
             .contains("cluster1", "cluster2", "cluster3");
+    }
+
+    /**
+     * Fake config impl. for cluster list tests.
+     */
+    private static class FakeConfig implements Config {
+        /**
+         * Expected clusters.
+         */
+        private final transient String clusters;
+
+        /**
+         * Ctor.
+         * @param clusters Expected clusters.
+         */
+        private FakeConfig(final String clusters) {
+            this.clusters = clusters;
+        }
+
+        @Override
+        public String clusters() {
+            return this.clusters;
+        }
+
+        @Override
+        public String defaultTag() {
+            return null;
+        }
+
+        @Override
+        public String tag(final String cluster) {
+            return null;
+        }
     }
 }

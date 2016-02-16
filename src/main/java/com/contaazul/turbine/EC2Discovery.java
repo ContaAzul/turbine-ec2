@@ -46,8 +46,10 @@ public final class EC2Discovery implements InstanceDiscovery {
     public Collection<Instance> getInstanceList() throws Exception {
         return new ClusterList(this.config).get()
             .parallelStream()
-            .map(cluster -> new InstanceList(cluster, this.credentials).get())
-            .flatMap(List::stream)
+            .map(cluster -> new InstanceList(
+                    cluster, this.credentials, this.config
+                ).get()
+            ).flatMap(List::stream)
             .collect(Collectors.toList());
     }
 }
