@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.contaazul</groupId>
+        <artifactId>turbine-ec2</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>turbine-ec2-web</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>turbine-ec2-web</name>
+    <packaging>war</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>com.netflix.turbine</groupId>
+            <artifactId>turbine-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.contaazul</groupId>
+            <artifactId>turbine-ec2-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+    </dependencies>
+</project>

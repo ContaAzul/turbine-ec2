@@ -32,7 +32,7 @@ public final class InstanceList {
     /**
      * Ctor.
      * @param cluster Cluster.
-     * @param credentials AWS credentials.
+     * @param client AWS client.
      * @param config Config.
      */
     public InstanceList(
@@ -56,7 +56,7 @@ public final class InstanceList {
         return this.client
             .describeInstances(this.request())
             .getReservations()
-            .stream()
+            .parallelStream()
             .map(Reservation::getInstances)
             .flatMap(List::stream)
             .map(converter::convert)

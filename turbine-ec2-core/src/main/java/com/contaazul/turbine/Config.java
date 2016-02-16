@@ -41,12 +41,12 @@ public interface Config {
             );
 
         /**
-         * Default tag name.
+         * Default tag name - defaults to "Name".
          */
         private static final DynamicStringProperty DEFAULT_TAG =
             DynamicPropertyFactory
                 .getInstance()
-                .getStringProperty("turbine.ec2.default.tag", null);
+                .getStringProperty("turbine.ec2.default.tag", "Name");
 
         @Override
         public String clusters() {

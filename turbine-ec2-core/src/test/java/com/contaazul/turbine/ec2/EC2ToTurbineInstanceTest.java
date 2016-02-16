@@ -17,14 +17,14 @@ public final class EC2ToTurbineInstanceTest {
      */
     @Test
     public void convertsRunningInstances() {
-        final String dns = "blah.dev.contaazul";
+        final String ip = "172.13.131.215";
         final String cluster = "blah";
         final Instance ec2 = new Instance()
-            .withPrivateDnsName(dns)
+            .withPrivateIpAddress(ip)
             .withState(new InstanceState().withName(InstanceStateName.Running));
         Assertions.assertThat(new EC2ToTurbineInstance(cluster).convert(ec2))
             .isNotNull()
-            .matches(instance -> instance.getHostname().equals(dns))
+            .matches(instance -> instance.getHostname().equals(ip))
             .matches(com.netflix.turbine.discovery.Instance::isUp);
     }
 
@@ -34,14 +34,14 @@ public final class EC2ToTurbineInstanceTest {
      */
     @Test
     public void convertsNonRunningInstances() {
-        final String dns = "blah2.dev.contaazul";
+        final String ip = "177.12.43.123";
         final String cluster = "blah";
         final Instance ec2 = new Instance()
-            .withPrivateDnsName(dns)
+            .withPrivateIpAddress(ip)
             .withState(new InstanceState().withName(InstanceStateName.Pending));
         Assertions.assertThat(new EC2ToTurbineInstance(cluster).convert(ec2))
             .isNotNull()
-            .matches(instance -> instance.getHostname().equals(dns))
+            .matches(instance -> instance.getHostname().equals(ip))
             .matches(instance -> !instance.isUp());
     }
 }

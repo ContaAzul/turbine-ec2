@@ -26,7 +26,7 @@ public final class EC2ToTurbineInstance {
      * @return Turbine instance.
      */
     public com.netflix.turbine.discovery.Instance convert(final Instance ec2) {
-        final String dns = ec2.getPrivateDnsName();
+        final String dns = ec2.getPrivateIpAddress();
         final boolean state = InstanceStateName.fromValue(
             ec2.getState().getName()
         ) == InstanceStateName.Running;

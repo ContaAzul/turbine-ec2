@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+    <listener>
+        <listener-class>com.contaazul.StartServer</listener-class>
+    </listener>
+    <servlet>
+        <display-name>TurbineStreamServlet</display-name>
+        <servlet-name>TurbineStreamServlet</servlet-name>
+        <servlet-class>
+            com.netflix.turbine.streaming.servlet.TurbineStreamServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TurbineStreamServlet</servlet-name>
+        <url-pattern>/turbine.stream</url-pattern>
+    </servlet-mapping>
+</web-app>
