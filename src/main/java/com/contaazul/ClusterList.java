@@ -1,25 +1,28 @@
 package com.contaazul;
 
 import com.google.common.collect.Lists;
-import com.netflix.config.DynamicPropertyFactory;
-import com.netflix.config.DynamicStringProperty;
-import com.netflix.turbine.discovery.InstanceDiscovery;
-
 import java.util.List;
 
+/**
+ * Lists the clusters configured in the properties file.
+ * @author Carlos Alexandro Becker
+ */
 public final class ClusterList {
-	private static final DynamicStringProperty CLUSTER_LIST = DynamicPropertyFactory.getInstance()
-			.getStringProperty( InstanceDiscovery.TURBINE_AGGREGATOR_CLUSTER_CONFIG, null );
+	private final transient Config config;
 
-	public List<String> get() throws Exception {
-		final String clusterConfig = CLUSTER_LIST.get();
+	public ClusterList(Config config) {
+		this.config = config;
+	}
+
+	/**
+	 * Returns the list of configured clusters.
+	 * @return List of clusters.
+     */
+	public List<String> get() {
+		final String clusterConfig = config.clusters();
 		if (clusterConfig == null || clusterConfig.trim().length() == 0) {
 			return Lists.newArrayList( "default" );
 		}
-		final List<String> clusters = Lists.newArrayList( clusterConfig.trim().split( "," ) );
-		if (clusters.size() == 0) {
-			throw new Exception( "Must configure property: " + CLUSTER_LIST.getName() );
-		}
-		return clusters;
+		return Lists.newArrayList( clusterConfig.trim().split( "," ) );
 	}
 }

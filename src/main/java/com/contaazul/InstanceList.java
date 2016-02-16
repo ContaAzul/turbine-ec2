@@ -24,7 +24,7 @@ public final class InstanceList {
 		for (final String tag : System.getProperty( "TAG_NAMES" ).split( ";" )) {
 			for (Reservation reservation : filter( tag ).getReservations()) {
 				for (com.amazonaws.services.ec2.model.Instance instance : reservation.getInstances()) {
-					list.add( converter.get( instance ) );
+					list.add( converter.convert( instance ) );
 				}
 			}
 		}
