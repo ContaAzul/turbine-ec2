@@ -38,6 +38,14 @@ public final class ClusterTag {
         if (Strings.isNullOrEmpty(tag)) {
             tag = this.config.defaultTag();
         }
+        if (Strings.isNullOrEmpty(tag)) {
+            throw new RuntimeException(
+                String.format(
+                    "No tags specified for '%s'",
+                    this.cluster
+                )
+            );
+        }
         return String.format("tag:%s", tag);
     }
 }

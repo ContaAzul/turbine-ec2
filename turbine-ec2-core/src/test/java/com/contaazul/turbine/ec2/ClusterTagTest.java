@@ -34,6 +34,19 @@ public final class ClusterTagTest {
     }
 
     /**
+     * {@link ClusterTag} can throw an exception in when no tags are configured.
+     */
+    @Test
+    public void throwsExceptionWhenNoTags() {
+        Assertions.assertThatThrownBy(
+            () -> new ClusterTag(
+                "blah", new ClusterTagTest.FakeConfig(null, null)
+            ).get()
+        ).isInstanceOf(RuntimeException.class)
+            .hasMessageContaining("No tags specified for 'blah'");
+    }
+
+    /**
      * Fake config impl. for cluster tag tests.
      */
     private static class FakeConfig implements Config {
