@@ -11,31 +11,16 @@ import org.junit.Test;
  */
 public final class ClusterListTest {
     /**
-     * {@link ClusterList} can return "default" in case clusters is not
-     * configured and return null.
-     */
-    @Test
-    public void nullClustersReturnDefault() {
-        final List<String> clusters = new ClusterList(
-            new ClusterListTest.FakeConfig(null)
-        ).get();
-        Assertions.assertThat(clusters)
-            .hasSize(1)
-            .contains("default");
-    }
-
-    /**
-     * {@link ClusterList} can return "default" in case clusters is not
+     * {@link ClusterList} can return an empty list in case clusters is not
      * configured and return an empty string.
      */
     @Test
-    public void emptyClustersReturnDefault() {
+    public void emptyClustersReturnEmptyList() {
         final List<String> clusters = new ClusterList(
             new ClusterListTest.FakeConfig("")
         ).get();
         Assertions.assertThat(clusters)
-            .hasSize(1)
-            .contains("default");
+            .isEmpty();
     }
 
     /**

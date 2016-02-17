@@ -8,12 +8,20 @@ import com.contaazul.turbine.Config;
 import com.netflix.turbine.discovery.Instance;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Instance listing from ec2.
  * @author Carlos Alexandro Becker
  */
 public final class InstanceList {
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(InstanceList.class);
+
     /**
      * Cluster.
      */
@@ -50,11 +58,19 @@ public final class InstanceList {
      * @return List of instances.
      */
     public List<Instance> get() {
+        final String tag = new ClusterTag(this.cluster, this.config).get();
+        InstanceList.LOGGER.info(
+            String.format(
+                "Looking for instances for '%s' using tag '%s'...",
+                this.cluster,
+                tag
+            )
+        );
         final EC2ToTurbineInstance converter = new EC2ToTurbineInstance(
             this.cluster
         );
         return this.client
-            .describeInstances(this.request())
+            .describeInstances(this.request(tag))
             .getReservations()
             .parallelStream()
             .map(Reservation::getInstances)
@@ -67,9 +83,9 @@ public final class InstanceList {
      * Builds a describe instance request.
      * @return Request.
      */
-    private DescribeInstancesRequest request() {
+    private DescribeInstancesRequest request(final String tag) {
         final Filter filter = new Filter()
-            .withName(new ClusterTag(this.cluster, this.config).get())
+            .withName(tag)
             .withValues(this.cluster);
         return new DescribeInstancesRequest().withFilters(filter);
     }

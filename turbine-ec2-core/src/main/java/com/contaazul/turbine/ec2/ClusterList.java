@@ -3,6 +3,7 @@ package com.contaazul.turbine.ec2;
 import com.contaazul.turbine.Config;
 import com.google.common.collect.Lists;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Lists the clusters configured in the properties file.
@@ -27,10 +28,9 @@ public final class ClusterList {
      * @return List of clusters.
      */
     public List<String> get() {
-        final String clusterConfig = this.config.clusters();
-        if (clusterConfig == null || clusterConfig.trim().length() == 0) {
-            return Lists.newArrayList("default");
-        }
-        return Lists.newArrayList(clusterConfig.trim().split(","));
+        return Lists.newArrayList(this.config.clusters().trim().split(","))
+            .stream()
+            .filter(cluster -> !cluster.isEmpty())
+            .collect(Collectors.toList());
     }
 }
