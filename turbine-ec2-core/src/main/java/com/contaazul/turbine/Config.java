@@ -44,7 +44,7 @@ public interface Config {
          */
         private static final DynamicStringProperty CLUSTERS =
             DynamicPropertyFactory.getInstance().getStringProperty(
-                InstanceDiscovery.TURBINE_AGGREGATOR_CLUSTER_CONFIG, null
+                InstanceDiscovery.TURBINE_AGGREGATOR_CLUSTER_CONFIG, ""
             );
 
         /**

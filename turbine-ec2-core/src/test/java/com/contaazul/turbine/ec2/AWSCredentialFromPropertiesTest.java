@@ -16,8 +16,7 @@ public final class AWSCredentialFromPropertiesTest {
     public void getsFromConfig() {
         final AWSCredentialsFromProperties config =
             new AWSCredentialsFromProperties();
-        Assertions.assertThat(config)
-            .matches(cfg -> cfg.getAWSAccessKeyId().equals("access-key"))
-            .matches(cfg -> cfg.getAWSSecretKey().equals("secret-key"));
+        Assertions.assertThat(config.getAWSAccessKeyId()).isNull();
+        Assertions.assertThat(config.getAWSSecretKey()).isNull();
     }
 }
