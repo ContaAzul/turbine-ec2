@@ -53,7 +53,7 @@ public interface Config {
         private static final DynamicStringProperty DEFAULT_TAG =
             DynamicPropertyFactory
                 .getInstance()
-                .getStringProperty("turbine.ec2.default.tag", "");
+                .getStringProperty("turbine.ec2.tag", "");
 
         @Override
         public String clusters() {
@@ -68,7 +68,7 @@ public interface Config {
         @Override
         public String tag(final String cluster) {
             final String property = String.format(
-                "turbine.ec2.%s.tag", cluster
+                "turbine.ec2.tag.%s", cluster
             );
             return DynamicPropertyFactory.getInstance()
                 .getStringProperty(property, "")
@@ -78,7 +78,7 @@ public interface Config {
         @Override
         public String value(final String cluster) {
             final String property = String.format(
-                "turbine.ec2.%s.value", cluster
+                "turbine.ec2.value.%s", cluster
             );
             return DynamicPropertyFactory.getInstance()
                 .getStringProperty(property, "")

@@ -26,22 +26,26 @@ Example:
 turbine.aggregator.clusterConfig=my-svc,other-svc
 turbine.instanceUrlSuffix=:8080/hystrix.stream
 
-# specific tag for `my-svc`
-turbine.ec2.my-svc.tag=SVC
-# specific tag value for `my-svc`
-turbine.ec2.my-svc.value=svc-value
-
 # generic tag, used whenever a specific tag is not specified
 turbine.ec2.tag=SERVICE
+
+# specific tag and tag value for `my-svc`
+turbine.ec2.tag.my-svc=SVC
+turbine.ec2.value.my-svc=svc-value
 
 # needed to access AWS api
 turbine.ec2.aws.access=AWS_ACCESS_KEY
 turbine.ec2.aws.secret=AWS_SECRET_KEY
 ```
 
-If you set a custom tag value via `turbine.ec2.${cluster}.value`, the value
+If you set a custom tag value via `turbine.ec2.value.${cluster}`, the value
 of this property will be used as filter. Otherwise, the cluster name will be
 used.
+
+If you set a custom tag name via `turbine.ec2.tag.${cluster}`, the given
+value will be used as `tag:${tag_you_provided}`. Otherwise, the value of
+`turbine.ec2.tag` will be used instead. If none is set, an exception will
+be thrown.
 
 That's it.
 
