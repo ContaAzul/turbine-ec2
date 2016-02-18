@@ -29,6 +29,13 @@ public interface Config {
     String tag(String cluster);
 
     /**
+     * Gets the tag value for a given cluster.
+     * @param cluster Cluster name.
+     * @return Tag value.
+     */
+    String value(String cluster);
+
+    /**
      * Loads config from properties.
      */
     final class FromProperties implements Config {
@@ -46,7 +53,7 @@ public interface Config {
         private static final DynamicStringProperty DEFAULT_TAG =
             DynamicPropertyFactory
                 .getInstance()
-                .getStringProperty("turbine.ec2.default.tag", null);
+                .getStringProperty("turbine.ec2.default.tag", "");
 
         @Override
         public String clusters() {
@@ -64,7 +71,17 @@ public interface Config {
                 "turbine.ec2.%s.tag", cluster
             );
             return DynamicPropertyFactory.getInstance()
-                .getStringProperty(property, null)
+                .getStringProperty(property, "")
+                .get();
+        }
+
+        @Override
+        public String value(final String cluster) {
+            final String property = String.format(
+                "turbine.ec2.%s.value", cluster
+            );
+            return DynamicPropertyFactory.getInstance()
+                .getStringProperty(property, "")
                 .get();
         }
     }

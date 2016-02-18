@@ -17,8 +17,8 @@ That's what this project do.
 ## How it works
 
 You will need to configure the `config.properties` file just as before. The
-difference is that you can setup what tag should be looked up to find instances
-of each service.
+difference is that you can setup what tag and value should be looked up to find
+instances of each service.
 
 Example:
 
@@ -28,6 +28,8 @@ turbine.instanceUrlSuffix=:8080/hystrix.stream
 
 # specific tag for `my-svc`
 turbine.ec2.my-svc.tag=SVC
+# specific tag value for `my-svc`
+turbine.ec2.my-svc.value=svc-value
 
 # generic tag, used whenever a specific tag is not specified
 turbine.ec2.tag=SERVICE
@@ -36,6 +38,10 @@ turbine.ec2.tag=SERVICE
 turbine.ec2.aws.access=AWS_ACCESS_KEY
 turbine.ec2.aws.secret=AWS_SECRET_KEY
 ```
+
+If you set a custom tag value via `turbine.ec2.${cluster}.value`, the value
+of this property will be used as filter. Otherwise, the cluster name will be
+used.
 
 That's it.
 

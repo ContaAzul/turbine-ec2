@@ -67,5 +67,10 @@ public final class ClusterListTest {
         public String tag(final String cluster) {
             return null;
         }
+
+        @Override
+        public String value(final String cluster) {
+            return null;
+        }
     }
 }

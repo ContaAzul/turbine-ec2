@@ -5,45 +5,74 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 /**
- * Test case for {@link ClusterTag}.
+ * Test case for ClusterTag.
  * @author Carlos Alexandro Becker
  */
 public final class ClusterTagTest {
     /**
-     * {@link ClusterTag} can get the default tag name if none is provided.
+     * ClusterTag can get the default tag name if none is provided.
      */
     @Test
     public void usesDefaultTagIfNoSpecificTagProvided() {
         Assertions.assertThat(
             new ClusterTag(
-                "blah", new ClusterTagTest.FakeConfig("default-tag", null)
-            ).get()
+                "blah",
+                new ClusterTagTest.FakeConfig("default-tag", "", "")
+            ).name()
         ).isEqualTo("tag:default-tag");
     }
 
     /**
-     * {@link ClusterTag} can get the default tag name if none is provided.
+     * ClusterTag can get the default tag name if none is provided.
      */
     @Test
     public void usesGivenTag() {
         Assertions.assertThat(
             new ClusterTag(
-                "blah", new ClusterTagTest.FakeConfig("default-tag", "blah-tag")
-            ).get()
+                "blah",
+                new ClusterTagTest.FakeConfig("default-tag", "blah-tag", "")
+            ).name()
         ).isEqualTo("tag:blah-tag");
     }
 
     /**
-     * {@link ClusterTag} can throw an exception in when no tags are configured.
+     * ClusterTag can throw an exception in when no tags are configured.
      */
     @Test
     public void throwsExceptionWhenNoTags() {
         Assertions.assertThatThrownBy(
             () -> new ClusterTag(
-                "blah", new ClusterTagTest.FakeConfig(null, null)
-            ).get()
+                "blah", new ClusterTagTest.FakeConfig("", "", "")
+            ).name()
         ).isInstanceOf(RuntimeException.class)
             .hasMessageContaining("No tags specified for 'blah'");
+    }
+
+    /**
+     * ClusterTag can use the cluster name as value when no specific value
+     * is given.
+     */
+    @Test
+    public void usesClusterNameWhenNoValue() {
+        Assertions.assertThat(
+            new ClusterTag(
+                "blah",
+                new ClusterTagTest.FakeConfig("", "", "")
+            ).value()
+        ).isEqualTo("blah");
+    }
+
+    /**
+     * ClusterTag can use the specified value as filter value.
+     */
+    @Test
+    public void usesGivenValue() {
+        Assertions.assertThat(
+            new ClusterTag(
+                "blah",
+                new ClusterTagTest.FakeConfig("", "", "blah-sandbox")
+            ).value()
+        ).isEqualTo("blah-sandbox");
     }
 
     /**
@@ -61,18 +90,28 @@ public final class ClusterTagTest {
         private final transient String tag;
 
         /**
+         * Expected value.
+         */
+        private final transient String value;
+
+        /**
          * Ctor.
          * @param defaultTag Expected default tag.
          * @param tag Expected tag.
          */
-        private FakeConfig(final String defaultTag, final String tag) {
+        private FakeConfig(
+            final String defaultTag,
+            final String tag,
+            final String value
+        ) {
             this.defaultTag = defaultTag;
             this.tag = tag;
+            this.value = value;
         }
 
         @Override
         public String clusters() {
-            return null;
+            return "";
         }
 
         @Override
@@ -83,6 +122,11 @@ public final class ClusterTagTest {
         @Override
         public String tag(final String cluster) {
             return this.tag;
+        }
+
+        @Override
+        public String value(final String cluster) {
+            return this.value;
         }
     }
 }

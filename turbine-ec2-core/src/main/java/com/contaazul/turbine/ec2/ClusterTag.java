@@ -1,7 +1,6 @@
 package com.contaazul.turbine.ec2;
 
 import com.contaazul.turbine.Config;
-import com.google.common.base.Strings;
 
 /**
  * Gets the appropriate tag for a given cluster.
@@ -33,12 +32,12 @@ public final class ClusterTag {
      * Gets the adequate tag from config.
      * @return Tag.
      */
-    public String get() {
+    public String name() {
         String tag = this.config.tag(this.cluster);
-        if (Strings.isNullOrEmpty(tag)) {
+        if (tag.isEmpty()) {
             tag = this.config.defaultTag();
         }
-        if (Strings.isNullOrEmpty(tag)) {
+        if (tag.isEmpty()) {
             throw new RuntimeException(
                 String.format(
                     "No tags specified for '%s'",
@@ -47,5 +46,17 @@ public final class ClusterTag {
             );
         }
         return String.format("tag:%s", tag);
+    }
+
+    /**
+     * Gets the adequate tag value from config. Defaults to cluster name.
+     * @return Tag.
+     */
+    public String value() {
+        String value = this.config.value(this.cluster);
+        if (value.isEmpty()) {
+            value = this.cluster;
+        }
+        return value;
     }
 }

@@ -58,19 +58,22 @@ public final class InstanceList {
      * @return List of instances.
      */
     public List<Instance> get() {
-        final String tag = new ClusterTag(this.cluster, this.config).get();
+        final ClusterTag tag = new ClusterTag(this.cluster, this.config);
+        final String name = tag.name();
+        final String value = tag.value();
         InstanceList.LOGGER.info(
             String.format(
-                "Looking for instances for '%s' using tag '%s'...",
+                "Looking for instances for '%s' filtering with '%s'='%s'",
                 this.cluster,
-                tag
+                name,
+                value
             )
         );
         final EC2ToTurbineInstance converter = new EC2ToTurbineInstance(
             this.cluster
         );
         return this.client
-            .describeInstances(this.request(tag))
+            .describeInstances(this.request(name, value))
             .getReservations()
             .parallelStream()
             .map(Reservation::getInstances)
@@ -83,10 +86,13 @@ public final class InstanceList {
      * Builds a describe instance request.
      * @return Request.
      */
-    private DescribeInstancesRequest request(final String tag) {
+    private DescribeInstancesRequest request(
+        final String tag,
+        final String value
+    ) {
         final Filter filter = new Filter()
             .withName(tag)
-            .withValues(this.cluster);
+            .withValues(value);
         return new DescribeInstancesRequest().withFilters(filter);
     }
 }

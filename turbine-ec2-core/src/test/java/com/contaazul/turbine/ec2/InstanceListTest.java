@@ -97,18 +97,29 @@ public final class InstanceListTest {
 
             @Override
             public String tag(final String cluster) {
-                return null;
+                return "";
+            }
+
+            @Override
+            public String value(final String cluster) {
+                return "";
             }
         };
     }
 
+    /**
+     * Fake reservation.
+     * @return Fake reservation with a single instance.
+     */
     private Reservation fakeReservation() {
         return new Reservation()
-            .withInstances(
-                Collections.singletonList(fakeInstance())
-            );
+            .withInstances(Collections.singletonList(this.fakeInstance()));
     }
 
+    /**
+     * Fake instance.
+     * @return Fake running instance.
+     */
     private com.amazonaws.services.ec2.model.Instance fakeInstance() {
         return new com.amazonaws.services.ec2.model.Instance()
             .withPrivateDnsName("any")
