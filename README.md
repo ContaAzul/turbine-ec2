@@ -53,9 +53,10 @@ That's it.
 
 ## Deploying
 
-You can either [download](https://github.com/ContaAzul/turbine-ec2/releases)
-the `turbine-ec2-core.jar` and wire it with your own code, or download the
-`turbine-ec2-web.war` and deploy it in a servlet container.
+You can either [download][download] the `turbine-ec2-core.jar` and wire
+it with your own code, or [download][download] the `turbine-ec2-web.war`
+and deploy it in a servlet container.
 
+[download]: https://github.com/ContaAzul/turbine-ec2/releases
 [hystrix]: https://github.com/Netflix/Hystrix
 [turbine]: https://github.com/Netflix/Turbine
