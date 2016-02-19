@@ -17,8 +17,8 @@ That's what this project does.
 ## How it works
 
 You will need to configure the `config.properties` file just as before. The
-difference is that you can specify what tag and value should be looked up to find
-instances of each service.
+difference is that you can specify which tag and value should be looked up to find
+instances of each cluster.
 
 Example:
 
