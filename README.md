@@ -9,15 +9,15 @@ aggregate Hystrix streams.
 
 Turbine has Eureka InstanceDiscovery, but we don't use it, nor want to use it.
 
-It seamed simple enough to just use our already defined tags to wire services
+It seemed simple enough to just use our already defined tags to wire services
 to Turbine.
 
-That's what this project do.
+That's what this project does.
 
 ## How it works
 
 You will need to configure the `config.properties` file just as before. The
-difference is that you can setup what tag and value should be looked up to find
+difference is that you can specify what tag and value should be looked up to find
 instances of each service.
 
 Example:
