@@ -4,10 +4,12 @@ Turbine Instance Discovery based on EC2 tags.
 
 ## Why
 
-At ContaAzul, we are using Hystrix for circuit-breakers and Turbine to
+At ContaAzul, we have used [Netflix/Hystrix][hystrix] for circuit-breakers and
+[Netflix/Turbine][turbine] to
 aggregate Hystrix streams.
 
-Turbine has Eureka InstanceDiscovery, but we don't use it, nor want to use it.
+Turbine has Eureka InstanceDiscovery, but we don't use it, nor plan to use it
+in near future.
 
 It seemed simple enough to just use our already defined tags to wire services
 to Turbine.
@@ -54,3 +56,6 @@ That's it.
 You can either download the `turbine-ec2-core.jar` and wire it with
 your own code, or download the `turbine-ec2-web.war` and deploy it in a
 servlet container.
+
+[hystrix]: https://github.com/Netflix/Hystrix
+[turbine]: https://github.com/Netflix/Turbine
