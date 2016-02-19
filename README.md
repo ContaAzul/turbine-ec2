@@ -1,4 +1,4 @@
-# turbine-ec2
+# turbine-ec2 [![Build Status](https://travis-ci.org/ContaAzul/turbine-ec2.svg?branch=master)](https://travis-ci.org/ContaAzul/turbine-ec2)
 
 Turbine Instance Discovery based on EC2 tags.
 
