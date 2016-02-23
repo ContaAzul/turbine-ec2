@@ -74,11 +74,6 @@ public final class ClusterListTest {
         }
 
         @Override
-        public String region(final String cluster) {
-            return "";
-        }
-
-        @Override
         public String region() {
             return "";
         }

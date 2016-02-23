@@ -50,11 +50,6 @@ public final class EC2ClientProviderTest {
                 }
 
                 @Override
-                public String region(final String cluster) {
-                    return "";
-                }
-
-                @Override
                 public String region() {
                     return "sa-east-1";
                 }
