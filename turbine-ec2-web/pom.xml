@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.contaazul</groupId>
         <artifactId>turbine-ec2</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <artifactId>turbine-ec2-web</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>turbine-ec2-web</name>
     <packaging>war</packaging>
     <dependencies>
