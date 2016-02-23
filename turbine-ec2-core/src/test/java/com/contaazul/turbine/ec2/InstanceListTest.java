@@ -24,10 +24,13 @@ import org.mockito.MockitoAnnotations;
 public final class InstanceListTest {
     @Mock
     private AmazonEC2Client client;
+    @Mock
+    private EC2ClientProvider provider;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
+        Mockito.when(this.provider.client()).thenReturn(this.client);
     }
 
     /**
@@ -49,7 +52,7 @@ public final class InstanceListTest {
         final List<Instance> instances = new InstanceList(
             "blah",
             this.fakeConfig(),
-            this.client
+            this.provider
         ).get();
         Assertions.assertThat(instances).hasSize(1);
     }
@@ -78,7 +81,7 @@ public final class InstanceListTest {
         final List<Instance> instances = new InstanceList(
             "blah",
             this.fakeConfig(),
-            this.client
+            this.provider
         ).get();
         Assertions.assertThat(instances).hasSize(4);
     }
@@ -102,6 +105,16 @@ public final class InstanceListTest {
 
             @Override
             public String value(final String cluster) {
+                return "";
+            }
+
+            @Override
+            public String region(final String cluster) {
+                return "";
+            }
+
+            @Override
+            public String region() {
                 return "";
             }
         };

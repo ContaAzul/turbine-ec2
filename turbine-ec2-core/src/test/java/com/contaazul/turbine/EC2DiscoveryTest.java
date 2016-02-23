@@ -6,6 +6,7 @@ import com.amazonaws.services.ec2.model.DescribeInstancesResult;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.InstanceState;
 import com.amazonaws.services.ec2.model.Reservation;
+import com.contaazul.turbine.ec2.EC2ClientProvider;
 import java.util.Arrays;
 import java.util.Collections;
 import org.assertj.core.api.Assertions;
@@ -27,18 +28,21 @@ public final class EC2DiscoveryTest {
     private DescribeInstancesResult result;
     @Mock
     private AmazonEC2Client client;
+    @Mock
+    private EC2ClientProvider provider;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
         Mockito.when(this.config.clusters()).thenReturn("svc1");
         Mockito.when(this.config.defaultTag()).thenReturn("tag");
+        Mockito.when(this.provider.client()).thenReturn(this.client);
         Mockito.when(
             this.client.describeInstances(
                 Mockito.any(DescribeInstancesRequest.class)
             )
         ).thenReturn(this.result);
-    }
+}
 
     /**
      * EC2Discovery can return an empty list of instances.
@@ -47,7 +51,7 @@ public final class EC2DiscoveryTest {
     @Test
     public void returnsEmptyList() throws Exception {
         Assertions.assertThat(
-            new EC2Discovery(this.config, this.client).getInstanceList()
+            new EC2Discovery(this.config, this.provider).getInstanceList()
         ).hasSize(0);
     }
 
@@ -66,7 +70,7 @@ public final class EC2DiscoveryTest {
             )
         );
         Assertions.assertThat(
-            new EC2Discovery(this.config, this.client).getInstanceList()
+            new EC2Discovery(this.config, this.provider).getInstanceList()
         ).hasSize(3);
     }
 

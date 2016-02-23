@@ -36,6 +36,19 @@ public interface Config {
     String value(String cluster);
 
     /**
+     * Gets the region in which the app is running.
+     * @param cluster Cluster name.
+     * @return Region of the cluster or default.
+     */
+    String region(String cluster);
+
+    /**
+     * Gets the default region in which the app is running.
+     * @return Default region.
+     */
+    String region();
+
+    /**
      * Loads config from properties.
      */
     final class FromProperties implements Config {
@@ -54,6 +67,14 @@ public interface Config {
             DynamicPropertyFactory
                 .getInstance()
                 .getStringProperty("turbine.ec2.tag", "");
+
+        /**
+         * Default region.
+         */
+        private static final DynamicStringProperty DEFAULT_REGION =
+            DynamicPropertyFactory
+                .getInstance()
+                .getStringProperty("turbine.ec2.aws.region", "us-east-1");
 
         @Override
         public String clusters() {
@@ -83,6 +104,21 @@ public interface Config {
             return DynamicPropertyFactory.getInstance()
                 .getStringProperty(property, "")
                 .get();
+        }
+
+        @Override
+        public String region(final String cluster) {
+            final String property = String.format(
+                "turbine.ec2.aws.region.%s", cluster
+            );
+            return DynamicPropertyFactory.getInstance()
+                .getStringProperty(property, "")
+                .get();
+        }
+
+        @Override
+        public String region() {
+            return Config.FromProperties.DEFAULT_REGION.get();
         }
     }
 }

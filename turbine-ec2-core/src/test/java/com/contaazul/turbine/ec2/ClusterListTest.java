@@ -60,17 +60,27 @@ public final class ClusterListTest {
 
         @Override
         public String defaultTag() {
-            return null;
+            return "";
         }
 
         @Override
         public String tag(final String cluster) {
-            return null;
+            return "";
         }
 
         @Override
         public String value(final String cluster) {
-            return null;
+            return "";
+        }
+
+        @Override
+        public String region(final String cluster) {
+            return "";
+        }
+
+        @Override
+        public String region() {
+            return "";
         }
     }
 }

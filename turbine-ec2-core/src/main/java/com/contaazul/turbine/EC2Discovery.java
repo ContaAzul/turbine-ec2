@@ -1,8 +1,8 @@
 package com.contaazul.turbine;
 
-import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.contaazul.turbine.ec2.AWSCredentialsFromProperties;
 import com.contaazul.turbine.ec2.ClusterList;
+import com.contaazul.turbine.ec2.EC2ClientProvider;
 import com.contaazul.turbine.ec2.InstanceList;
 import com.netflix.turbine.discovery.Instance;
 import com.netflix.turbine.discovery.InstanceDiscovery;
@@ -21,9 +21,9 @@ public final class EC2Discovery implements InstanceDiscovery {
     private final transient Config config;
 
     /**
-     * Ec2 client.
+     * Ec2 client provider.
      */
-    private final transient AmazonEC2Client client;
+    private final transient EC2ClientProvider provider;
 
     /**
      * Ctor using configs from properties.
@@ -31,18 +31,21 @@ public final class EC2Discovery implements InstanceDiscovery {
     public EC2Discovery() {
         this(
             new Config.FromProperties(),
-            new AmazonEC2Client(new AWSCredentialsFromProperties())
+            new EC2ClientProvider.Smart(
+                new AWSCredentialsFromProperties(),
+                new Config.FromProperties()
+            )
         );
     }
 
     /**
      * Ctor.
      * @param config Config implementation.
-     * @param client Ec2 client.
+     * @param provider AWS credentials.
      */
-    public EC2Discovery(final Config config, final AmazonEC2Client client) {
+    public EC2Discovery(final Config config, final EC2ClientProvider provider) {
         this.config = config;
-        this.client = client;
+        this.provider = provider;
     }
 
     @Override
@@ -50,7 +53,7 @@ public final class EC2Discovery implements InstanceDiscovery {
         return new ClusterList(this.config).get()
             .parallelStream()
             .map(cluster -> new InstanceList(
-                    cluster, this.config, this.client
+                    cluster, this.config, this.provider
                 ).get()
             ).flatMap(List::stream)
             .collect(Collectors.toList());

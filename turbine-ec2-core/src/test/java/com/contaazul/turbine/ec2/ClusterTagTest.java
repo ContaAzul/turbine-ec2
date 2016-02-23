@@ -128,5 +128,15 @@ public final class ClusterTagTest {
         public String value(final String cluster) {
             return this.value;
         }
+
+        @Override
+        public String region(final String cluster) {
+            return "";
+        }
+
+        @Override
+        public String region() {
+            return "";
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.contaazul.turbine.ec2;
 
-import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.Filter;
 import com.amazonaws.services.ec2.model.Reservation;
@@ -28,9 +27,9 @@ public final class InstanceList {
     private final transient String cluster;
 
     /**
-     * AWS ec2 client.
+     * AWS client provider..
      */
-    private final transient AmazonEC2Client client;
+    private final transient EC2ClientProvider provider;
 
     /**
      * Config.
@@ -40,16 +39,16 @@ public final class InstanceList {
     /**
      * Ctor.
      * @param cluster Cluster.
-     * @param client AWS client.
+     * @param provider AWS client provider.
      * @param config Config.
      */
     public InstanceList(
         final String cluster,
         final Config config,
-        final AmazonEC2Client client
+        final EC2ClientProvider provider
     ) {
         this.cluster = cluster;
-        this.client = client;
+        this.provider = provider;
         this.config = config;
     }
 
@@ -72,7 +71,7 @@ public final class InstanceList {
         final EC2ToTurbineInstance converter = new EC2ToTurbineInstance(
             this.cluster
         );
-        return this.client
+        return this.provider.client()
             .describeInstances(this.request(name, value))
             .getReservations()
             .parallelStream()
