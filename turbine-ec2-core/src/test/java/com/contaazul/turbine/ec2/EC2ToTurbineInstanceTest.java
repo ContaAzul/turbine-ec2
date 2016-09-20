@@ -3,6 +3,7 @@ package com.contaazul.turbine.ec2;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.InstanceState;
 import com.amazonaws.services.ec2.model.InstanceStateName;
+import com.amazonaws.services.ec2.model.Tag;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -26,6 +27,44 @@ public final class EC2ToTurbineInstanceTest {
             .isNotNull()
             .matches(instance -> instance.getHostname().equals(ip))
             .matches(com.netflix.turbine.discovery.Instance::isUp);
+    }
+
+    /**
+     * {@link EC2ToTurbineInstance} can convert a running ec2 instance into
+     * a turbine instance with its name as address.
+     */
+    @Test
+    public void convertsRunningInstancesWithName() {
+        final String ip = "172.13.131.215";
+        final String name = "google.com";
+        final String cluster = "blah";
+        final Instance ec2 = new Instance()
+                .withPrivateIpAddress(ip)
+                .withTags(new Tag("Name", name))
+                .withState(new InstanceState().withName(InstanceStateName.Running));
+        Assertions.assertThat(new EC2ToTurbineInstance(cluster).convert(ec2))
+                .isNotNull()
+                .matches(instance -> instance.getHostname().equals(name))
+                .matches(com.netflix.turbine.discovery.Instance::isUp);
+    }
+
+    /**
+     * {@link EC2ToTurbineInstance} can convert a running ec2 instance into
+     * a turbine instance with an invalid name as address.
+     */
+    @Test
+    public void convertsRunningInstancesWithInvalidName() {
+        final String ip = "172.13.131.215";
+        final String name = "asdasdasdasdasda";
+        final String cluster = "blah";
+        final Instance ec2 = new Instance()
+                .withPrivateIpAddress(ip)
+                .withTags(new Tag("Name", name))
+                .withState(new InstanceState().withName(InstanceStateName.Running));
+        Assertions.assertThat(new EC2ToTurbineInstance(cluster).convert(ec2))
+                .isNotNull()
+                .matches(instance -> instance.getHostname().equals(ip))
+                .matches(com.netflix.turbine.discovery.Instance::isUp);
     }
 
     /**
