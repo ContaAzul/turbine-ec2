@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.contaazul</groupId>
     <artifactId>turbine-ec2</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
     <name>turbine-ec2</name>
     <url>http://contaazul.com</url>
