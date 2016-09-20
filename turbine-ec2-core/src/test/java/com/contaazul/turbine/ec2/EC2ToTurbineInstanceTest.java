@@ -36,7 +36,7 @@ public final class EC2ToTurbineInstanceTest {
     @Test
     public void convertsRunningInstancesWithName() {
         final String ip = "172.13.131.215";
-        final String name = "localhost";
+        final String name = "google.com";
         final String cluster = "blah";
         final Instance ec2 = new Instance()
                 .withPrivateIpAddress(ip)
@@ -55,7 +55,7 @@ public final class EC2ToTurbineInstanceTest {
     @Test
     public void convertsRunningInstancesWithInvalidName() {
         final String ip = "172.13.131.215";
-        final String name = "google.com";
+        final String name = "asdasdasdasdasda";
         final String cluster = "blah";
         final Instance ec2 = new Instance()
                 .withPrivateIpAddress(ip)
