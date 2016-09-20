@@ -37,7 +37,7 @@ public final class EC2ToTurbineInstance {
             ec2.getState().getName()
         ) == InstanceStateName.Running;
         return new com.netflix.turbine.discovery.Instance(
-                addr, this.cluster, state
+            addr, this.cluster, state
         );
     }
 
