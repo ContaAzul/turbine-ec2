@@ -38,7 +38,7 @@ turbine.ec2.value.my-svc=svc-value
 # needed to access AWS api
 turbine.ec2.aws.access=AWS_ACCESS_KEY
 turbine.ec2.aws.secret=AWS_SECRET_KEY
-turbine.ec2.aws=REGION
+turbine.ec2.aws.region=REGION
 ```
 
 If you set a custom tag value via `turbine.ec2.value.${cluster}`, the value
